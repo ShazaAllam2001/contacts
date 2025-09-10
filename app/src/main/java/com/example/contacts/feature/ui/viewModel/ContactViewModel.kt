@@ -6,6 +6,7 @@ import com.example.contacts.feature.data.local.db.ContactDao
 import com.example.contacts.feature.data.local.db.entities.Contact
 import com.example.contacts.feature.ui.states.ContactState
 import com.example.contacts.feature.ui.states.SortType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@HiltViewModel
 class ContactViewModel @Inject constructor(
     private val contactDao: ContactDao
 ): ViewModel() {
@@ -64,7 +66,7 @@ class ContactViewModel @Inject constructor(
         _sortType.value = sortType
     }
 
-    fun showDialog(contact: Contact) {
+    fun showDialog() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(showDialog = true)
@@ -72,7 +74,7 @@ class ContactViewModel @Inject constructor(
         }
     }
 
-    fun hideDialog(contact: Contact) {
+    fun hideDialog() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(showDialog = false)

@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.contacts"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.contacts"
@@ -39,6 +39,15 @@ android {
     buildFeatures {
         compose = true
     }
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "schemas")
+        }
+        correctErrorTypes = true
+    }
+    hilt {
+        enableAggregatingTask = false
+    }
 }
 
 dependencies {
@@ -60,13 +69,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.activity)
 
+    kapt(libs.room.compiler)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    kapt(libs.room.compiler)
     implementation(libs.room.paging)
 
-    implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.javapoet)
 }

@@ -6,7 +6,8 @@ import com.example.contacts.feature.data.local.db.entities.Contact
 
 @Database(
     entities = [Contact::class],
-    version = 1
+    version = 1,
+    exportSchema = true
 )
 abstract class ContactDatabase: RoomDatabase() {
     abstract val dao: ContactDao
