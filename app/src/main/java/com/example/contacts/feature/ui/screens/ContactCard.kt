@@ -20,6 +20,7 @@ import com.example.contacts.feature.data.local.db.entities.Contact
 @Composable
 fun ContactCard(
     contact: Contact,
+    onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
     Card(
@@ -41,13 +42,23 @@ fun ContactCard(
                     style = MaterialTheme.typography.labelSmall
                 )
             }
-            IconButton(
-                onClick = onDelete
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.delete_24),
-                    contentDescription = "Delete Contact"
-                )
+            Row {
+                IconButton(
+                    onClick = onEdit
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.edit_24),
+                        contentDescription = "Delete Contact"
+                    )
+                }
+                IconButton(
+                    onClick = onDelete
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.delete_24),
+                        contentDescription = "Delete Contact"
+                    )
+                }
             }
         }
     }

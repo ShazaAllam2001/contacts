@@ -1,5 +1,6 @@
 package com.example.contacts.feature.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Scaffold
@@ -18,8 +20,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.contacts.R
+import com.example.contacts.feature.ui.screens.dialogs.AddContactDialog
+import com.example.contacts.feature.ui.screens.dialogs.EditContactDialog
 import com.example.contacts.feature.ui.states.SortType
 import com.example.contacts.feature.ui.viewModel.ContactViewModel
 
@@ -32,7 +38,7 @@ fun ContactScreen(contactViewModel: ContactViewModel) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    contactViewModel.showDialog()
+                    contactViewModel.showAddDialog()
                 }
             ) {
                 Icon(
@@ -47,6 +53,7 @@ fun ContactScreen(contactViewModel: ContactViewModel) {
         ) {
             LazyRow(
                 modifier = Modifier.fillMaxWidth()
+                    .padding(10.dp)
             ) {
                 items(SortType.entries, key = { sortType -> sortType }) { sortType ->
                     Row(
@@ -62,21 +69,38 @@ fun ContactScreen(contactViewModel: ContactViewModel) {
                     }
                 }
             }
+            Text(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                text = stringResource(R.string.contacts),
+                style = MaterialTheme.typography.titleLarge
+            )
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(uiState.contacts, key = { contact -> contact.id }) { contact ->
                     ContactCard(
                         contact = contact,
+                        onEdit = { contactViewModel.showEditDialog() },
                         onDelete = { contactViewModel.deleteContact(contact) }
                     )
+
+                    if (uiState.showEditDialog) {
+                        EditContactDialog(
+                            contact = contact,
+                            onDismiss = { contactViewModel.hideEditDialog() },
+                            contactViewModel = contactViewModel
+                        )
+                    }
                 }
             }
         }
 
-        if (uiState.showDialog) {
+        if (uiState.showAddDialog) {
             AddContactDialog(
-                onDismiss = { contactViewModel.hideDialog() },
+                onDismiss = { contactViewModel.hideAddDialog() },
                 contactViewModel = contactViewModel
             )
         }

@@ -3,6 +3,7 @@ package com.example.contacts.feature.data.local.db
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
+import androidx.room.Update
 import androidx.room.Upsert
 import com.example.contacts.feature.data.local.db.entities.Contact
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,9 @@ interface ContactDao{
 
     @Delete
     suspend fun deleteContact(contact: Contact)
+
+    @Update
+    fun updateContact(contact: Contact)
 
     @Query("SELECT * FROM contacts ORDER BY firstName ASC")
     fun getContactsByFirstName(): Flow<List<Contact>>

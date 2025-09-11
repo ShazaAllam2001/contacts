@@ -66,23 +66,41 @@ class ContactViewModel @Inject constructor(
         _sortType.value = sortType
     }
 
-    fun showDialog() {
+    /* Dialogs */
+    fun showAddDialog() {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(showDialog = true)
+                it.copy(showAddDialog = true)
             }
         }
     }
 
-    fun hideDialog() {
+    fun hideAddDialog() {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(showDialog = false)
+                it.copy(showAddDialog = false)
             }
         }
     }
 
-    fun saveContact() {
+    fun showEditDialog() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(showEditDialog = true)
+            }
+        }
+    }
+
+    fun hideEditDialog() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(showEditDialog = false)
+            }
+        }
+    }
+
+    /* Update Database */
+    fun addContact() {
         viewModelScope.launch {
             val firstName = _uiState.value.firstName
             val lastName = _uiState.value.lastName
@@ -93,6 +111,20 @@ class ContactViewModel @Inject constructor(
                 phoneNumber = phoneNumber
             )
             contactDao.insertContact(contact)
+        }
+    }
+
+    fun updateContact() {
+        viewModelScope.launch {
+            val firstName = _uiState.value.firstName
+            val lastName = _uiState.value.lastName
+            val phoneNumber = _uiState.value.phoneNumber
+            val contact = Contact(
+                firstName = firstName,
+                lastName = lastName,
+                phoneNumber = phoneNumber
+            )
+            contactDao.updateContact(contact)
         }
     }
 

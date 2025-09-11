@@ -22,11 +22,18 @@ val Typography = Typography(
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
+    labelLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.5.sp
+    ),
     labelMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
-        lineHeight = 16.sp,
+        lineHeight = 18.sp,
         letterSpacing = 0.5.sp
     ),
     labelSmall = TextStyle(
