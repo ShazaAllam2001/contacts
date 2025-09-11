@@ -83,10 +83,13 @@ class ContactViewModel @Inject constructor(
         }
     }
 
-    fun showEditDialog() {
+    fun showEditDialog(contact: Contact) {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(showEditDialog = true)
+                it.copy(
+                    showEditDialog = true,
+                    contact = contact
+                )
             }
         }
     }
@@ -120,6 +123,7 @@ class ContactViewModel @Inject constructor(
             val lastName = _uiState.value.lastName
             val phoneNumber = _uiState.value.phoneNumber
             val contact = Contact(
+                id = _uiState.value.contact?.id ?: 0,
                 firstName = firstName,
                 lastName = lastName,
                 phoneNumber = phoneNumber

@@ -17,7 +17,7 @@ interface ContactDao{
     suspend fun deleteContact(contact: Contact)
 
     @Update
-    fun updateContact(contact: Contact)
+    suspend fun updateContact(contact: Contact)
 
     @Query("SELECT * FROM contacts ORDER BY firstName ASC")
     fun getContactsByFirstName(): Flow<List<Contact>>

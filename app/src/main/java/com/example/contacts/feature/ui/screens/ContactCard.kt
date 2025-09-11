@@ -13,9 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.example.contacts.R
 import com.example.contacts.feature.data.local.db.entities.Contact
+import com.example.contacts.ui.theme.dimens
 
 @Composable
 fun ContactCard(
@@ -31,7 +31,7 @@ fun ContactCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(MaterialTheme.dimens.paddingLarge)
             ) {
                 Text(
                     text = "${contact.firstName} ${contact.lastName}",

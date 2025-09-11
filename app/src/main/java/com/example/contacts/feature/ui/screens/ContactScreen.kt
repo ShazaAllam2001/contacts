@@ -21,13 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.contacts.R
 import com.example.contacts.feature.ui.screens.dialogs.AddContactDialog
 import com.example.contacts.feature.ui.screens.dialogs.EditContactDialog
 import com.example.contacts.feature.ui.states.SortType
 import com.example.contacts.feature.ui.viewModel.ContactViewModel
+import com.example.contacts.ui.theme.dimens
 
 @Composable
 fun ContactScreen(contactViewModel: ContactViewModel) {
@@ -43,7 +43,7 @@ fun ContactScreen(contactViewModel: ContactViewModel) {
             ) {
                 Icon(
                     painter = painterResource(R.drawable.add_24),
-                    contentDescription = "add contact",
+                    contentDescription = "Add contact",
                 )
             }
         }
@@ -53,7 +53,7 @@ fun ContactScreen(contactViewModel: ContactViewModel) {
         ) {
             LazyRow(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(MaterialTheme.dimens.paddingLarge)
             ) {
                 items(SortType.entries, key = { sortType -> sortType }) { sortType ->
                     Row(
@@ -70,30 +70,22 @@ fun ContactScreen(contactViewModel: ContactViewModel) {
                 }
             }
             Text(
-                modifier = Modifier.padding(horizontal = 20.dp),
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimens.paddingExtraLarge),
                 text = stringResource(R.string.contacts),
                 style = MaterialTheme.typography.titleLarge
             )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(10.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(MaterialTheme.dimens.paddingLarge),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.paddingMedium)
             ) {
                 items(uiState.contacts, key = { contact -> contact.id }) { contact ->
                     ContactCard(
                         contact = contact,
-                        onEdit = { contactViewModel.showEditDialog() },
+                        onEdit = { contactViewModel.showEditDialog(contact) },
                         onDelete = { contactViewModel.deleteContact(contact) }
                     )
-
-                    if (uiState.showEditDialog) {
-                        EditContactDialog(
-                            contact = contact,
-                            onDismiss = { contactViewModel.hideEditDialog() },
-                            contactViewModel = contactViewModel
-                        )
-                    }
                 }
             }
         }
@@ -101,6 +93,12 @@ fun ContactScreen(contactViewModel: ContactViewModel) {
         if (uiState.showAddDialog) {
             AddContactDialog(
                 onDismiss = { contactViewModel.hideAddDialog() },
+                contactViewModel = contactViewModel
+            )
+        }
+        if (uiState.showEditDialog) {
+            EditContactDialog(
+                onDismiss = { contactViewModel.hideEditDialog() },
                 contactViewModel = contactViewModel
             )
         }

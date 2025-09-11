@@ -17,10 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.contacts.R
 import com.example.contacts.feature.ui.viewModel.ContactViewModel
+import com.example.contacts.ui.theme.dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,12 +33,12 @@ fun AddContactDialog(
     BasicAlertDialog(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .padding(20.dp),
+            .padding(MaterialTheme.dimens.paddingExtraLarge),
         onDismissRequest = onDismiss
     )  {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.paddingLarge)
         ) {
             Text(
                 text = stringResource(R.string.add_new_contact),
@@ -75,6 +75,9 @@ fun AddContactDialog(
                     onClick = {
                         onDismiss()
                         contactViewModel.addContact()
+                        contactViewModel.setFirstName("")
+                        contactViewModel.setLastName("")
+                        contactViewModel.setPhoneNumber("")
                     }
                 ) {
                     Text(
