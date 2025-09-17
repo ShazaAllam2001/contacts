@@ -8,5 +8,5 @@ interface ContactsRepository {
     suspend fun addContact(contact: Contact): Result<Unit>
     suspend fun updateContact(contact: Contact): Result<Unit>
     suspend fun deleteContact(contact: Contact): Result<Unit>
-    suspend fun getContacts(sortType: SortType): Result<Flow<List<Contact>>>
+    suspend fun getContacts(sortType: SortType, name: String): Result<Flow<List<Contact>>>
 }

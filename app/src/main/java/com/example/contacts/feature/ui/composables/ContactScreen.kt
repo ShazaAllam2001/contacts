@@ -17,6 +17,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,6 +35,8 @@ import com.example.contacts.ui.theme.dimens
 @Composable
 fun ContactScreen(contactViewModel: ContactViewModel) {
     val uiState by contactViewModel.uiState.collectAsStateWithLifecycle()
+
+    var searchText by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -69,6 +74,11 @@ fun ContactScreen(contactViewModel: ContactViewModel) {
                     }
                 }
             }
+            SearchField(
+                contactViewModel = contactViewModel,
+                textValue = searchText,
+                onChangeText = { searchText = it }
+            )
             Text(
                 modifier = Modifier.padding(horizontal = MaterialTheme.dimens.paddingExtraLarge),
                 text = stringResource(R.string.contacts),

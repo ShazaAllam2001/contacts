@@ -22,9 +22,24 @@ interface ContactDao{
     @Query("SELECT * FROM contacts ORDER BY firstName ASC")
     fun getContactsByFirstName(): Flow<List<Contact>>
 
+    @Query("SELECT * FROM contacts " +
+            "WHERE firstName LIKE '%'|| :name || '%' OR lastName LIKE '%'|| :name || '%'" +
+            "ORDER BY firstName ASC")
+    fun getContactsByFirstName(name: String): Flow<List<Contact>>
+
     @Query("SELECT * FROM contacts ORDER BY lastName ASC")
     fun getContactsByLastName(): Flow<List<Contact>>
 
+    @Query("SELECT * FROM contacts " +
+            "WHERE firstName LIKE '%'|| :name || '%' OR lastName LIKE '%'|| :name || '%'" +
+            "ORDER BY lastName ASC")
+    fun getContactsByLastName(name: String): Flow<List<Contact>>
+
     @Query("SELECT * FROM contacts ORDER BY phoneNumber ASC")
     fun getContactsByPhoneNumber(): Flow<List<Contact>>
+
+    @Query("SELECT * FROM contacts " +
+            "WHERE firstName LIKE '%'|| :name || '%' OR lastName LIKE '%'|| :name || '%'" +
+            "ORDER BY phoneNumber ASC")
+    fun getContactsByPhoneNumber(name: String): Flow<List<Contact>>
 }

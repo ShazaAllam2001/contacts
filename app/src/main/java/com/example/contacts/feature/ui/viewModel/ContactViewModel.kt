@@ -34,12 +34,19 @@ class ContactViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(ContactState())
     private var _sortType = MutableStateFlow(SortType.FIRST_NAME)
-    private val _contacts = _sortType.flatMapLatest { sortType ->
-        when (val result = getContactsUseCase(sortType)) {
-            is ContactsResult.Success -> result.contacts
-            is ContactsResult.Error -> emptyFlow()
+    private var _searchText = MutableStateFlow("")
+
+    private val _contacts: StateFlow<List<Contact>> = _sortType
+        .combine(_searchText) { sortType, searchText ->
+            sortType to searchText
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .flatMapLatest { (sortType, searchText) ->
+            when (val result = getContactsUseCase(sortType, searchText)) {
+                is ContactsResult.Success -> result.contacts
+                is ContactsResult.Error -> emptyFlow()
+            }
+        }
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     val uiState: StateFlow<ContactState> =
         combine(_uiState, _sortType, _contacts) { uiState, sortType, contacts ->
@@ -47,7 +54,9 @@ class ContactViewModel @Inject constructor(
                 sortType = sortType,
                 contacts = contacts
             )
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ContactState())
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ContactState())
+
 
     fun setFirstName(firstName: String) {
         viewModelScope.launch {
@@ -70,6 +79,12 @@ class ContactViewModel @Inject constructor(
             _uiState.update {
                 it.copy(phoneNumber = phoneNumber)
             }
+        }
+    }
+
+    fun searchContacts(searchText: String) {
+        viewModelScope.launch {
+            _searchText.value = searchText
         }
     }
 

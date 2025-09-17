@@ -29,12 +29,27 @@ class ContactsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getContacts(sortType: SortType): Result<Flow<List<Contact>>> {
+    override suspend fun getContacts(sortType: SortType, name: String): Result<Flow<List<Contact>>> {
         return runCatching {
             when (sortType) {
-                SortType.FIRST_NAME -> contactDao.getContactsByFirstName()
-                SortType.LAST_NAME -> contactDao.getContactsByLastName()
-                SortType.PHONE_NUMBER -> contactDao.getContactsByPhoneNumber()
+                SortType.FIRST_NAME -> {
+                    if (name.isBlank())
+                        contactDao.getContactsByFirstName()
+                    else
+                        contactDao.getContactsByFirstName(name)
+                }
+                SortType.LAST_NAME -> {
+                    if (name.isBlank())
+                        contactDao.getContactsByFirstName()
+                    else
+                        contactDao.getContactsByLastName(name)
+                }
+                SortType.PHONE_NUMBER -> {
+                    if (name.isBlank())
+                        contactDao.getContactsByPhoneNumber()
+                    else
+                        contactDao.getContactsByPhoneNumber(name)
+                }
             }
         }
     }

@@ -9,4 +9,6 @@ data class Dimensions(
     val paddingMedium: Dp = 8.dp,
     val paddingLarge: Dp = 10.dp,
     val paddingExtraLarge: Dp = 20.dp,
+
+    val roundCorner: Dp = 20.dp
 )

@@ -9,4 +9,5 @@
     <string name="save_contact">Save Contact</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="add_new_contact">Add New Contact</string>
+    <string name="search_for_contact">Search for Contact</string>
 </resources>
