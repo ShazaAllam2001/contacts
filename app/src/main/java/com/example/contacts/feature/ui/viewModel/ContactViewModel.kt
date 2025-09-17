@@ -2,8 +2,12 @@ package com.example.contacts.feature.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.contacts.feature.data.local.db.ContactDao
 import com.example.contacts.feature.data.local.db.entities.Contact
+import com.example.contacts.feature.domain.model.ContactsResult
+import com.example.contacts.feature.domain.usecases.AddContactUseCase
+import com.example.contacts.feature.domain.usecases.DeleteContactUseCase
+import com.example.contacts.feature.domain.usecases.GetContactsUseCase
+import com.example.contacts.feature.domain.usecases.UpdateContactUseCase
 import com.example.contacts.feature.ui.states.ContactState
 import com.example.contacts.feature.ui.states.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -21,16 +26,18 @@ import javax.inject.Inject
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class ContactViewModel @Inject constructor(
-    private val contactDao: ContactDao
+    private val addContactUseCase: AddContactUseCase,
+    private val deleteContactUseCase: DeleteContactUseCase,
+    private val updateContactUseCase: UpdateContactUseCase,
+    private val getContactsUseCase: GetContactsUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(ContactState())
     private var _sortType = MutableStateFlow(SortType.FIRST_NAME)
     private val _contacts = _sortType.flatMapLatest { sortType ->
-        when (sortType) {
-            SortType.FIRST_NAME -> contactDao.getContactsByFirstName()
-            SortType.LAST_NAME -> contactDao.getContactsByLastName()
-            SortType.PHONE_NUMBER -> contactDao.getContactsByPhoneNumber()
+        when (val result = getContactsUseCase(sortType)) {
+            is ContactsResult.Success -> result.contacts
+            is ContactsResult.Error -> emptyFlow()
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
@@ -42,28 +49,34 @@ class ContactViewModel @Inject constructor(
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ContactState())
 
-
-
     fun setFirstName(firstName: String) {
-        _uiState.update {
-            it.copy(firstName = firstName)
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(firstName = firstName)
+            }
         }
     }
 
     fun setLastName(lastName: String) {
-        _uiState.update {
-            it.copy(lastName = lastName)
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(lastName = lastName)
+            }
         }
     }
 
     fun setPhoneNumber(phoneNumber: String) {
-        _uiState.update {
-            it.copy(phoneNumber = phoneNumber)
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(phoneNumber = phoneNumber)
+            }
         }
     }
 
     fun sortContacts(sortType: SortType) {
-        _sortType.value = sortType
+        viewModelScope.launch {
+            _sortType.value = sortType
+        }
     }
 
     /* Dialogs */
@@ -113,7 +126,7 @@ class ContactViewModel @Inject constructor(
                 lastName = lastName,
                 phoneNumber = phoneNumber
             )
-            contactDao.insertContact(contact)
+            addContactUseCase(contact)
         }
     }
 
@@ -128,13 +141,13 @@ class ContactViewModel @Inject constructor(
                 lastName = lastName,
                 phoneNumber = phoneNumber
             )
-            contactDao.updateContact(contact)
+            updateContactUseCase(contact)
         }
     }
 
     fun deleteContact(contact: Contact) {
         viewModelScope.launch {
-            contactDao.deleteContact(contact)
+            deleteContactUseCase(contact)
         }
     }
 }

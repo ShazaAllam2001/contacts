@@ -1,4 +1,4 @@
-package com.example.contacts.feature.ui.screens.dialogs
+package com.example.contacts.feature.ui.composables.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,11 +25,16 @@ import com.example.contacts.ui.theme.dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddContactDialog(
+fun EditContactDialog(
     onDismiss: () -> Unit,
     contactViewModel: ContactViewModel
 ) {
     val uiState by contactViewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) {
+        contactViewModel.setFirstName(uiState.contact?.firstName ?: "")
+        contactViewModel.setLastName(uiState.contact?.lastName ?: "")
+        contactViewModel.setPhoneNumber(uiState.contact?.phoneNumber ?: "")
+    }
 
     BasicAlertDialog(
         modifier = Modifier
@@ -41,7 +47,7 @@ fun AddContactDialog(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.paddingLarge)
         ) {
             Text(
-                text = stringResource(R.string.add_new_contact),
+                text = stringResource(R.string.edit_contact),
                 style = MaterialTheme.typography.labelLarge
             )
             TextField(
@@ -69,19 +75,16 @@ fun AddContactDialog(
                 textStyle = MaterialTheme.typography.labelMedium
             )
             Row(
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ElevatedButton(
                     onClick = {
                         onDismiss()
-                        contactViewModel.addContact()
-                        contactViewModel.setFirstName("")
-                        contactViewModel.setLastName("")
-                        contactViewModel.setPhoneNumber("")
+                        contactViewModel.updateContact()
                     }
                 ) {
                     Text(
-                        stringResource(R.string.add_contact),
+                        stringResource(R.string.save_contact),
                         style = MaterialTheme.typography.labelMedium
                     )
                 }

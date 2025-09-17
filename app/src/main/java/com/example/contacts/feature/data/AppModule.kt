@@ -10,7 +10,8 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import androidx.room.Room
 import com.example.contacts.feature.data.local.db.ContactDao
-
+import com.example.contacts.feature.data.repository.ContactsRepositoryImpl
+import com.example.contacts.feature.domain.repository.ContactsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -29,4 +30,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideContactDao(db: ContactDatabase): ContactDao = db.dao
+
+    @Provides
+    @Singleton
+    fun provideContactRepo(dao: ContactDao): ContactsRepository {
+        return ContactsRepositoryImpl(dao)
+    }
 }

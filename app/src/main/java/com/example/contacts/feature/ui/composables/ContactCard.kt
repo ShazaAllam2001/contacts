@@ -1,4 +1,4 @@
-package com.example.contacts.feature.ui.screens
+package com.example.contacts.feature.ui.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

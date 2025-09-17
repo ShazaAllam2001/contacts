@@ -10,5 +10,6 @@ data class ContactState(
     val phoneNumber: String = "",
     val showAddDialog: Boolean = false,
     val showEditDialog: Boolean = false,
-    val sortType: SortType = SortType.FIRST_NAME
+    val sortType: SortType = SortType.FIRST_NAME,
+    val errorMessage: String = ""
 )

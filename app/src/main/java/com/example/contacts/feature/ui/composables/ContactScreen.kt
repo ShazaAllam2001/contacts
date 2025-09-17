@@ -1,4 +1,4 @@
-package com.example.contacts.feature.ui.screens
+package com.example.contacts.feature.ui.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,8 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.contacts.R
-import com.example.contacts.feature.ui.screens.dialogs.AddContactDialog
-import com.example.contacts.feature.ui.screens.dialogs.EditContactDialog
+import com.example.contacts.feature.ui.composables.dialogs.AddContactDialog
+import com.example.contacts.feature.ui.composables.dialogs.EditContactDialog
 import com.example.contacts.feature.ui.states.SortType
 import com.example.contacts.feature.ui.viewModel.ContactViewModel
 import com.example.contacts.ui.theme.dimens

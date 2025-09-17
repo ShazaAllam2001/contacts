@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.contacts.feature.ui.screens.ContactScreen
+import com.example.contacts.feature.ui.composables.ContactScreen
 import com.example.contacts.feature.ui.viewModel.ContactViewModel
 import com.example.contacts.ui.theme.ContactsTheme
 import dagger.hilt.android.AndroidEntryPoint
